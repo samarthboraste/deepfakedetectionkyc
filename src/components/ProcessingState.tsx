@@ -3,55 +3,27 @@ import { Shield, Scan, Brain, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProcessingStateProps {
-  onComplete: () => void;
+  progress?: number;
+  currentStep?: string;
 }
 
 const steps = [
-  { icon: Scan, label: "Extracting frames", duration: 1500 },
-  { icon: Brain, label: "Analyzing facial features", duration: 2000 },
-  { icon: Shield, label: "Detecting manipulation", duration: 1500 },
-  { icon: CheckCircle2, label: "Generating report", duration: 1000 },
+  { icon: Scan, label: "Extracting frames" },
+  { icon: Brain, label: "Sending to AI for analysis" },
+  { icon: Shield, label: "Processing results" },
+  { icon: CheckCircle2, label: "Analysis complete" },
 ];
 
-export const ProcessingState = ({ onComplete }: ProcessingStateProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [progress, setProgress] = useState(0);
+export const ProcessingState = ({ progress = 0, currentStep = "" }: ProcessingStateProps) => {
+  // Determine which step is active based on progress
+  const getActiveStep = () => {
+    if (progress < 30) return 0;
+    if (progress < 80) return 1;
+    if (progress < 100) return 2;
+    return 3;
+  };
 
-  useEffect(() => {
-    let stepIndex = 0;
-    let progressInterval: ReturnType<typeof setInterval>;
-
-    const runStep = () => {
-      if (stepIndex >= steps.length) {
-        setTimeout(onComplete, 500);
-        return;
-      }
-
-      setCurrentStep(stepIndex);
-      const stepDuration = steps[stepIndex].duration;
-      const startProgress = (stepIndex / steps.length) * 100;
-      const endProgress = ((stepIndex + 1) / steps.length) * 100;
-      const increment = (endProgress - startProgress) / (stepDuration / 50);
-
-      let currentProgress = startProgress;
-      progressInterval = setInterval(() => {
-        currentProgress += increment;
-        if (currentProgress >= endProgress) {
-          currentProgress = endProgress;
-          clearInterval(progressInterval);
-          stepIndex++;
-          setTimeout(runStep, 200);
-        }
-        setProgress(currentProgress);
-      }, 50);
-    };
-
-    runStep();
-
-    return () => {
-      clearInterval(progressInterval);
-    };
-  }, [onComplete]);
+  const activeStepIndex = getActiveStep();
 
   return (
     <div className="glass-card rounded-2xl p-8 max-w-lg mx-auto">
@@ -73,12 +45,12 @@ export const ProcessingState = ({ onComplete }: ProcessingStateProps) => {
       <div className="mb-6">
         <div className="h-2 bg-secondary rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-primary to-[hsl(199,89%,48%)] transition-all duration-100"
+            className="h-full bg-gradient-to-r from-primary to-[hsl(199,89%,48%)] transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
         <p className="text-center text-sm text-muted-foreground mt-2">
-          {Math.round(progress)}% complete
+          {currentStep || `${Math.round(progress)}% complete`}
         </p>
       </div>
 
@@ -86,8 +58,8 @@ export const ProcessingState = ({ onComplete }: ProcessingStateProps) => {
       <div className="space-y-3">
         {steps.map((step, index) => {
           const Icon = step.icon;
-          const isActive = index === currentStep;
-          const isComplete = index < currentStep;
+          const isActive = index === activeStepIndex;
+          const isComplete = index < activeStepIndex;
 
           return (
             <div

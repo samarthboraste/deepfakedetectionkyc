@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Shield, Zap, Eye, Brain, Lock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
@@ -6,32 +6,38 @@ import { VideoUpload } from "@/components/VideoUpload";
 import { ProcessingState } from "@/components/ProcessingState";
 import { VerificationResult } from "@/components/VerificationResult";
 import { FeatureCard } from "@/components/FeatureCard";
+import { useVideoAnalysis } from "@/hooks/useVideoAnalysis";
 
 type AppState = "landing" | "upload" | "processing" | "result";
 
 const Index = () => {
+  const { analyzeVideo, isAnalyzing, progress, currentStep } = useVideoAnalysis();
   const [appState, setAppState] = useState<AppState>("landing");
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
-  const [result, setResult] = useState<{ isAuthentic: boolean; confidence: number } | null>(null);
+  const [result, setResult] = useState<{ isAuthentic: boolean; confidence: number; summary?: string } | null>(null);
 
   const handleVideoSelect = (file: File) => {
     setSelectedVideo(file);
   };
 
-  const handleStartVerification = () => {
+  const handleStartVerification = async () => {
     if (selectedVideo) {
       setAppState("processing");
+      
+      const analysisResult = await analyzeVideo(selectedVideo);
+      
+      if (analysisResult) {
+        setResult({
+          isAuthentic: analysisResult.isAuthentic,
+          confidence: analysisResult.confidence,
+          summary: analysisResult.summary,
+        });
+        setAppState("result");
+      } else {
+        // On error, go back to upload
+        setAppState("upload");
+      }
     }
-  };
-
-  const handleProcessingComplete = () => {
-    // Simulate random result for demo
-    const isAuthentic = Math.random() > 0.4;
-    const confidence = isAuthentic
-      ? Math.floor(Math.random() * 10) + 90
-      : Math.floor(Math.random() * 20) + 25;
-    setResult({ isAuthentic, confidence });
-    setAppState("result");
   };
 
   const handleReset = () => {
@@ -164,7 +170,7 @@ const Index = () => {
 
         {/* Processing State */}
         {appState === "processing" && (
-          <ProcessingState onComplete={handleProcessingComplete} />
+          <ProcessingState progress={progress} currentStep={currentStep} />
         )}
 
         {/* Result State */}
