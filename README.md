@@ -1,73 +1,131 @@
-# Welcome to your Lovable project
+# 🛡️ Deepfake KYC Buster
 
-## Project info
+Real-time Deepfake Detection System for Secure KYC Verification
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 📌 Overview
 
-## How can I edit this code?
+Deepfake KYC Buster is an AI-powered system designed to detect deepfake videos during Know Your Customer (KYC) verification processes. It helps banks, fintech platforms, crypto exchanges, and government systems prevent identity fraud by analyzing live video streams and detecting manipulated or synthetic media in real time.
 
-There are several ways of editing your application.
+The solution focuses on security, accuracy, and low latency, making it suitable for real-world financial applications.
 
-**Use Lovable**
+## 🚀 Key Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+* 🔍 Real-time deepfake detection
 
-Changes made via Lovable will be committed automatically to this repo.
+* 🎥 Live video stream analysis
 
-**Use your preferred IDE**
+* 🧠 AI-based facial and motion analysis
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+* 🔐 Secure KYC verification
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* ⚡ Low-latency processing
 
-Follow these steps:
+* 📊 Confidence score & fraud flagging
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🏗️ System Architecture
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The system follows a modular, scalable architecture:
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 1. Video Stream Processor
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Captures live video frames
 
-**Edit a file directly in GitHub**
+Performs preprocessing (frame extraction, resizing, normalization)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 2. AI Detection Engine
 
-**Use GitHub Codespaces**
+* Detects facial inconsistencies
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+* Analyzes eye movement, lip sync, and texture artifacts
 
-## What technologies are used for this project?
+* Uses deep learning models to identify deepfakes
 
-This project is built with:
+### 3. Decision Engine
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+* Generates a risk score
 
-## How can I deploy this project?
+* Flags suspicious or fake KYC attempts
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### 4. KYC Verification Layer
 
-## Can I connect a custom domain to my Lovable project?
+* Integrates with existing KYC workflows
 
-Yes, you can!
+* Approves or rejects verification requests
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🧠 Technologies Used
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* Frontend: HTML, CSS, JavaScript
+
+* Backend: Node.js / Python (Flask or FastAPI)
+
+* AI/ML: TensorFlow / PyTorch
+
+* Computer Vision: OpenCV
+
+* Authentication: Firebase / OAuth
+
+* Database: Firebase Firestore / MongoDB
+
+* Streaming: WebRTC
+
+## 🔐 Security Highlights
+
+* Encrypted video transmission
+
+* Secure authentication flow
+
+* No permanent storage of user video data
+
+* GDPR-friendly and privacy-focused design
+
+## 🌍 Real-World Applications
+
+* 🏦 Banks & NBFCs
+
+* 💳 Fintech Applications
+
+* 💱 Crypto Exchanges
+
+* 🏛️ Government Digital ID Systems
+
+* 📱 Online Loan & Wallet Apps
+
+## 🧪 How It Works
+
+* User initiates KYC video verification
+
+* Live video stream is captured
+
+* Frames are analyzed in real time
+
+* AI model detects deepfake patterns
+
+* System generates a verification result
+
+* KYC is approved or rejected
+
+## 📈 Future Enhancements
+
+* Liveness detection (blink & head movement checks)
+
+* Multi-face detection
+
+* Voice deepfake detection
+
+* Cloud-based scalability
+
+* Integration with Aadhaar / e-KYC APIs
+
+## 🧑‍💻 Team
+
+* 👥 Team of 4 members
+
+* 🎯 Built for hackathons & real-world fintech use cases
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## ⭐ Acknowledgements
+
+Special thanks to open-source AI communities and cybersecurity researchers whose work inspired this project.
