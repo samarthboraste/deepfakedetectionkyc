@@ -8,6 +8,33 @@ interface VerificationResultProps {
   onReset: () => void;
 }
 
+const generateReport = (isAuthentic: boolean, confidence: number, metrics: { label: string; score: number }[]) => {
+  const report = {
+    reportId: `VER-${Date.now()}`,
+    generatedAt: new Date().toISOString(),
+    verdict: isAuthentic ? "AUTHENTIC" : "DEEPFAKE_DETECTED",
+    confidenceScore: confidence,
+    analysisDetails: metrics.map(m => ({
+      metric: m.label,
+      score: m.score,
+      status: m.score >= 70 ? "PASS" : "FAIL"
+    })),
+    recommendation: isAuthentic 
+      ? "Video appears authentic. Safe to proceed with verification."
+      : "Video shows signs of manipulation. Do not proceed with KYC verification."
+  };
+
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `deepverify-report-${report.reportId}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
 export const VerificationResult = ({ isAuthentic, confidence, onReset }: VerificationResultProps) => {
   const metrics = [
     { label: "Facial Consistency", score: isAuthentic ? 96 : 34 },
@@ -137,7 +164,7 @@ export const VerificationResult = ({ isAuthentic, confidence, onReset }: Verific
           <ArrowLeft className="h-4 w-4" />
           Verify Another
         </Button>
-        <Button variant="hero" className="flex-1">
+        <Button variant="hero" className="flex-1" onClick={() => generateReport(isAuthentic, confidence, metrics)}>
           <Download className="h-4 w-4" />
           Download Report
         </Button>
